@@ -47,4 +47,9 @@ public class PlayerController {
     public void updatePlayer(@PathVariable("playerId") Long playerId, @RequestBody Player player) {
         playerService.updatePlayer(playerId, player);
     }
+
+    @GetMapping("/secured")
+    public String secured() {
+        return "Hello, secured!";
+    }
 }
