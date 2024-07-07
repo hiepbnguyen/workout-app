@@ -1,11 +1,12 @@
 package com.example.workout_app.controller;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.workout_app.models.WSet;
+import com.example.workout_app.models.SetOfReps;
 import com.example.workout_app.service.WorkoutService;
 
 @RestController
@@ -19,7 +20,12 @@ public class WorkoutController {
 	}
 
 	@GetMapping("/helo")
-	public List<WSet> getWorkouts() {
+	public List<SetOfReps> getWorkouts() {
 		return workoutService.getWorkouts();
+	}
+
+	@GetMapping("/testing")
+	public String testingPurposes() {
+		return new String("");
 	}
 }

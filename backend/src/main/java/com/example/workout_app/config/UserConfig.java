@@ -10,32 +10,33 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.workout_app.models.Day;
-import com.example.workout_app.models.Player;
-import com.example.workout_app.repositories.PlayerRepository;
+import com.example.workout_app.models.UserEntity;
+import com.example.workout_app.repositories.UserRepository;
 
 @Configuration
-public class PlayerConfig {
+public class UserConfig {
     
+    // Adds two users by default
     @Bean
-    CommandLineRunner commandLineRunner(PlayerRepository playerRepository){
+    CommandLineRunner commandLineRunner(UserRepository userRepository){
         return args -> {
             List<Day> alexDays = new ArrayList<Day>();
             alexDays.add(new Day());
 
-            Player alex = new Player(
+            UserEntity alex = new UserEntity(
                 "Alex",
                 "alex@gmail.com",
                 LocalDate.of(2000, Month.JANUARY, 4),
                 null
             );
-            Player john = new Player(
+            UserEntity john = new UserEntity(
                 "Mariam",
                 "mariam@gmail.com",
                 LocalDate.of(2002, Month.AUGUST, 5),
                 null
             );
 
-            playerRepository.saveAll(
+            userRepository.saveAll(
                 List.of(alex, john)
             );
         };

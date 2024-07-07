@@ -14,13 +14,16 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table
-public class WSet {
+public class SetOfReps {
     @Id
-    @SequenceGenerator(name = "wset_sequence", sequenceName = "wset_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "wset_sequence")
+    @SequenceGenerator(name = "setrep_sequence", sequenceName = "setrep_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "setrep_sequence")
     private long id;
+    
     private float weight = -1;
+
     private int reps = -1;
+
     private LocalTime time = null;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -77,12 +80,12 @@ public class WSet {
             return this;
         }
 
-        public WSet build(){
-            return new WSet(this);
+        public SetOfReps build(){
+            return new SetOfReps(this);
         }
     }
 
-    private WSet(Builder builder){
+    private SetOfReps(Builder builder){
         weight = builder.weight;
         reps = builder.reps;
         time = builder.time;

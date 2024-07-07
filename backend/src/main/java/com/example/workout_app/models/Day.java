@@ -19,11 +19,13 @@ public class Day {
     @SequenceGenerator(name = "day_sequence", sequenceName = "day_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "day_sequence")
     private Long id;
+    
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "player_id")
-    private Player player;
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
+
     @ManyToMany(mappedBy = "days")
     private List<Workout> workouts;
 }

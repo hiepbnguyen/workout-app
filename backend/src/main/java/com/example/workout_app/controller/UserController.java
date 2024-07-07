@@ -2,8 +2,8 @@ package com.example.workout_app.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.workout_app.models.Player;
-import com.example.workout_app.service.PlayerService;
+import com.example.workout_app.models.UserEntity;
+import com.example.workout_app.service.UserService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,32 +20,32 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping(path = "/api/v1/player")
-public class PlayerController {
+@RequestMapping(path = "/api/v1/user")
+public class UserController {
 
-    private final PlayerService playerService;
-    public PlayerController(PlayerService playerService) {
-        this.playerService = playerService;
+    private final UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public List<Player> getMethodName() {
-        return playerService.getPlayers();
+    public List<UserEntity> getMethodName() {
+        return userService.getPlayers();
     }
 
     @PostMapping
-    public void registerNewPlayer(@RequestBody Player player) {
-        playerService.addNewPlayer(player);
+    public void registerNewPlayer(@RequestBody UserEntity player) {
+        userService.addNewPlayer(player);
     }
 
     @DeleteMapping(path = "{playerId}")
     public void deletePlayer(@PathVariable("playerId") Long id) {
-        playerService.deletePlayer(id);
+        userService.deletePlayer(id);
     }
 
     @PutMapping("{playerId}")
-    public void updatePlayer(@PathVariable("playerId") Long playerId, @RequestBody Player player) {
-        playerService.updatePlayer(playerId, player);
+    public void updatePlayer(@PathVariable("playerId") Long playerId, @RequestBody UserEntity player) {
+        userService.updatePlayer(playerId, player);
     }
 
     @GetMapping("/secured")

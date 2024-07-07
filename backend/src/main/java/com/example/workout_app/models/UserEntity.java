@@ -4,30 +4,47 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table
-
-public class Player {
+public class UserEntity {
     @Id
-    @SequenceGenerator(name = "player_sequence", sequenceName = "player_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "player_sequence")
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
-    private String name;
+
     private String email;
+
+    private String password;
+
+    private String name;
+
     private LocalDate dob;
-    @OneToMany(mappedBy = "player")
+
+    @OneToMany(mappedBy = "userEntity")
     private List<Day> days;
 
-    public Player() {}
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 
-    public Player(String name, String email, LocalDate dob, List<Day> days) {
+    public UserEntity() {}
+
+    public UserEntity(String name, String email, LocalDate dob, List<Day> days) {
         this.name = name;
         this.email = email;
         this.dob = dob;
@@ -61,9 +78,15 @@ public class Player {
     public void setEmail(String email) {
         this.email = email;
     }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public String toString() {
-        return "Player [id=" + id + ", name=" + name + ", dob=" + dob + ", days=" + days + "]";
+        return "UserEntity [id=" + id + ", name=" + name + ", dob=" + dob + ", days=" + days + "]";
     }
 }

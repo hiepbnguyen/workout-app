@@ -5,18 +5,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.workout_app.models.WSet;
+import com.example.workout_app.models.SetOfReps;
 
 @Service
 public class WorkoutService {
 
-    public List<WSet> getWorkouts(){
+    public List<SetOfReps> getWorkouts(){
 		return List.of(
-			new WSet.Builder()
+			new SetOfReps.Builder()
 				.reps(20)
 				.weight(44)
 				.build(),
-			new WSet.Builder()
+			new SetOfReps.Builder()
 				.reps(50)
 				.weight(40)
 				.time(LocalTime.of(0,0,0))

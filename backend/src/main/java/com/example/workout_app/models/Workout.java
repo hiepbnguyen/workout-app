@@ -20,6 +20,7 @@ public class Workout {
     @SequenceGenerator(name = "workout_sequence", sequenceName = "workout_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "workout_sequence")
     private Long id;
+    
     private String name;
 
     @ManyToMany
@@ -28,8 +29,9 @@ public class Workout {
         joinColumns = @JoinColumn(name = "workout_id"),
         inverseJoinColumns = @JoinColumn(name = "day_id"))
     public List<Day> days;
+
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<WSet> sets;
+    public List<SetOfReps> sets;
 
 
     public Long getId() {
@@ -47,10 +49,10 @@ public class Workout {
     public void setDay(List<Day> day) {
         this.days = day;
     }
-    public List<WSet> getSets() {
+    public List<SetOfReps> getSets() {
         return sets;
     }
-    public void setSets(List<WSet> sets) {
+    public void setSets(List<SetOfReps> sets) {
         this.sets = sets;
     }
 }
