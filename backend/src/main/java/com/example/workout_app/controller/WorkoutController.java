@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.workout_app.models.SetOfReps;
+import com.example.workout_app.models.SetEntity;
 import com.example.workout_app.service.WorkoutService;
 
 @RestController
@@ -20,7 +20,7 @@ public class WorkoutController {
 	}
 
 	@GetMapping("/helo")
-	public List<SetOfReps> getWorkouts() {
+	public List<SetEntity> getWorkouts() {
 		return workoutService.getWorkouts();
 	}
 

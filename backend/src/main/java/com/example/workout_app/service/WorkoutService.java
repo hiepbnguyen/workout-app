@@ -5,18 +5,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.workout_app.models.SetOfReps;
+import com.example.workout_app.models.SetEntity;
 
 @Service
 public class WorkoutService {
 
-    public List<SetOfReps> getWorkouts(){
+    public List<SetEntity> getWorkouts(){
 		return List.of(
-			new SetOfReps.Builder()
+			new SetEntity.Builder()
 				.reps(20)
 				.weight(44)
 				.build(),
-			new SetOfReps.Builder()
+			new SetEntity.Builder()
 				.reps(50)
 				.weight(40)
 				.time(LocalTime.of(0,0,0))

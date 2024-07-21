@@ -31,7 +31,7 @@ public class Workout {
     public List<Day> days;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<SetOfReps> sets;
+    public List<SetEntity> sets;
 
 
     public Long getId() {
@@ -49,10 +49,10 @@ public class Workout {
     public void setDay(List<Day> day) {
         this.days = day;
     }
-    public List<SetOfReps> getSets() {
+    public List<SetEntity> getSets() {
         return sets;
     }
-    public void setSets(List<SetOfReps> sets) {
+    public void setSets(List<SetEntity> sets) {
         this.sets = sets;
     }
 }

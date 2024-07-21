@@ -14,10 +14,10 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table
-public class SetOfReps {
+public class SetEntity {
     @Id
-    @SequenceGenerator(name = "setrep_sequence", sequenceName = "setrep_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "setrep_sequence")
+    @SequenceGenerator(name = "set_sequence", sequenceName = "set_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "set_sequence")
     private long id;
     
     private float weight = -1;
@@ -80,12 +80,12 @@ public class SetOfReps {
             return this;
         }
 
-        public SetOfReps build(){
-            return new SetOfReps(this);
+        public SetEntity build(){
+            return new SetEntity(this);
         }
     }
 
-    private SetOfReps(Builder builder){
+    private SetEntity(Builder builder){
         weight = builder.weight;
         reps = builder.reps;
         time = builder.time;
