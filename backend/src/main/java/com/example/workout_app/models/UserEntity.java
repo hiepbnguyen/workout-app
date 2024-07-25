@@ -2,6 +2,8 @@ package com.example.workout_app.models;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,14 +44,36 @@ public class UserEntity {
     )
     private List<Role> roles;
 
+
+
+    private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     public UserEntity() {}
 
-    public UserEntity(String name, String email, LocalDate dob, List<Day> days) {
+    public UserEntity(String email, String password, String name, LocalDate dob) {
+        this.name = name;
+        this.email = email;
+        this.dob = dob;
+
+        String encryptedPassword = encoder.encode(password);
+        this.password = encryptedPassword;
+
+        // this.days = days;
+    }
+
+    public UserEntity(String email, String password, String name, LocalDate dob, List<Day> days) {
         this.name = name;
         this.email = email;
         this.dob = dob;
         this.days = days;
     }
+    
+    // public UserEntity(String name, String email, LocalDate dob, List<Day> days) {
+    //     this.name = name;
+    //     this.email = email;
+    //     this.dob = dob;
+    //     this.days = days;
+    // }
 
     public Long getId() {
         return id;

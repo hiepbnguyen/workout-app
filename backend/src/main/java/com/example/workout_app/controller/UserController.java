@@ -2,6 +2,7 @@ package com.example.workout_app.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.workout_app.dto.RegisterFormDTO;
 import com.example.workout_app.models.UserEntity;
 import com.example.workout_app.service.UserService;
 
@@ -34,18 +35,18 @@ public class UserController {
     }
 
     @PostMapping
-    public void registerNewPlayer(@RequestBody UserEntity player) {
-        userService.addNewPlayer(player);
+    public void registerNewPlayer(@RequestBody RegisterFormDTO user) {
+        userService.addNewUser(user);
     }
 
     @DeleteMapping(path = "{playerId}")
     public void deletePlayer(@PathVariable("playerId") Long id) {
-        userService.deletePlayer(id);
+        userService.deleteUser(id);
     }
 
     @PutMapping("{playerId}")
     public void updatePlayer(@PathVariable("playerId") Long playerId, @RequestBody UserEntity player) {
-        userService.updatePlayer(playerId, player);
+        userService.updateUser(playerId, player);
     }
 
     @GetMapping("/secured")

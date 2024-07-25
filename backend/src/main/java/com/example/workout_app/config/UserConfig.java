@@ -23,22 +23,22 @@ public class UserConfig {
             List<Day> alexDays = new ArrayList<Day>();
             alexDays.add(new Day());
 
-            UserEntity alex = new UserEntity(
-                "Alex",
-                "alex@gmail.com",
-                LocalDate.of(2000, Month.JANUARY, 4),
-                null
-            );
-            UserEntity john = new UserEntity(
-                "Mariam",
-                "mariam@gmail.com",
-                LocalDate.of(2002, Month.AUGUST, 5),
-                null
-            );
+            // UserEntity alex = new UserEntity(
+            //     "Alex",
+            //     "alex@gmail.com",
+            //     LocalDate.of(2000, Month.JANUARY, 4),
+            //     null
+            // );
+            // UserEntity john = new UserEntity(
+            //     "Mariam",
+            //     "mariam@gmail.com",
+            //     LocalDate.of(2002, Month.AUGUST, 5),
+            //     null
+            // );
 
-            userRepository.saveAll(
-                List.of(alex, john)
-            );
+            // userRepository.saveAll(
+            //     List.of(alex, john)
+            // );
         };
     }
 }

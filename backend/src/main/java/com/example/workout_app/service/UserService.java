@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.workout_app.dto.RegisterFormDTO;
 import com.example.workout_app.models.UserEntity;
 import com.example.workout_app.repositories.UserRepository;
 
@@ -13,55 +14,58 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserService {
     
-    private final UserRepository playerRepository;
+    private final UserRepository userRepository;
 
-    public UserService(UserRepository playerRepository){
-        this.playerRepository = playerRepository;
+    public UserService(UserRepository userRepository){
+        this.userRepository = userRepository;
     }
 
     public List<UserEntity> getPlayers() {
-        return playerRepository.findAll();
+        return userRepository.findAll();
     }
 
-    public void addNewPlayer(UserEntity player) {
-        Optional<UserEntity> playerByEmail = playerRepository.findByEmail(player.getEmail());
+    public void addNewUser(RegisterFormDTO user) {
+        Optional<UserEntity> playerByEmail = userRepository.findByEmail(user.getEmail());
+
+        // Throws error if email is unavailable
         if (playerByEmail.isPresent()){
-            // Unavailable email
             throw new IllegalStateException("email taken");
         }
-        // Available email
-        playerRepository.save(player);
+        
+        UserEntity newUser = new UserEntity(user.getEmail(), user.getPassword(), user.getName(), user.getDob());
 
-        System.out.println(player);
+        userRepository.save(newUser);
+
+        System.out.println(newUser);
     }
 
-    public void deletePlayer(long playerId) {
-        boolean exists = playerRepository.existsById(playerId);
+    public void deleteUser(long userId) {
+        boolean exists = userRepository.existsById(userId);
         if (!exists){
-            throw new IllegalStateException("player with id " + playerId + " does not exist.");
+            throw new IllegalStateException("player with id " + userId + " does not exist.");
         }
-        playerRepository.deleteById(playerId);
+        userRepository.deleteById(userId);
     }
 
     // ALlows changes to DOB, Name, and Email
     @Transactional
-    public void updatePlayer(Long playerId, UserEntity playerUpdate) {
-        System.out.println(playerUpdate);
+    public void updateUser(Long userId, UserEntity userUpdate) {
+        System.out.println(userUpdate);
 
-        UserEntity currentPlayer = playerRepository.findById(playerId).orElseThrow(
-            () -> new IllegalStateException("Player with id " + playerId + "does not exist.")
+        UserEntity currentPlayer = userRepository.findById(userId).orElseThrow(
+            () -> new IllegalStateException("Player with id " + userId + "does not exist.")
         );
 
-        if (verifyEmail(playerUpdate.getEmail())){
-            currentPlayer.setEmail(playerUpdate.getEmail());
+        if (verifyEmail(userUpdate.getEmail())){
+            currentPlayer.setEmail(userUpdate.getEmail());
         }
         
-        if (verifyName(playerUpdate.getName())){
-            currentPlayer.setName(playerUpdate.getName());
+        if (verifyName(userUpdate.getName())){
+            currentPlayer.setName(userUpdate.getName());
         }
 
-        if (playerUpdate.getDob() != null){
-            currentPlayer.setDob(playerUpdate.getDob());
+        if (userUpdate.getDob() != null){
+            currentPlayer.setDob(userUpdate.getDob());
         }
     }
 
@@ -76,19 +80,19 @@ public class UserService {
         if (email == null || email.length() == 0) {
             return false;
         }
-        if (playerRepository.findByEmail(email).isPresent()){
+        if (userRepository.findByEmail(email).isPresent()){
             throw new IllegalStateException("email exists.");
         }
         return true;
     }
 
-    public boolean verifyEmail(String email, Long playerId) {
+    public boolean verifyEmail(String email, Long userId) {
         if (email == null || email.length() == 0) {
             return false;
         }
-        Optional<UserEntity> p = playerRepository.findByEmail(email);
+        Optional<UserEntity> p = userRepository.findByEmail(email);
         if (p.isPresent()){
-            if (p.get().getId() == playerId){
+            if (p.get().getId() == userId){
                 return true;
             }
             throw new IllegalStateException("email exists.");
