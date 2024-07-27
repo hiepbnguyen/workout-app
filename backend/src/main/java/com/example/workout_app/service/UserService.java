@@ -1,12 +1,16 @@
 package com.example.workout_app.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.workout_app.dto.RegisterFormDTO;
 import com.example.workout_app.models.UserEntity;
+import com.example.workout_app.repositories.RoleRepository;
 import com.example.workout_app.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -15,60 +19,65 @@ import jakarta.transaction.Transactional;
 public class UserService {
     
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.encoder = passwordEncoder;
     }
 
-    public List<UserEntity> getPlayers() {
+    public List<UserEntity> getUsers() {
         return userRepository.findAll();
     }
 
+    // Adds a new user
     public void addNewUser(RegisterFormDTO user) {
-        Optional<UserEntity> playerByEmail = userRepository.findByEmail(user.getEmail());
-
         // Throws error if email is unavailable
-        if (playerByEmail.isPresent()){
+        if (userRepository.existsByEmail(user.getEmail())){
             throw new IllegalStateException("email taken");
         }
         
-        UserEntity newUser = new UserEntity(user.getEmail(), user.getPassword(), user.getName(), user.getDob());
+        UserEntity newUser = new UserEntity(user.getEmail(), encoder.encode(user.getPassword()), user.getName(), user.getDob(), Collections.singletonList(roleRepository.findByName("ROLE_USER").orElseThrow()));
 
         userRepository.save(newUser);
 
         System.out.println(newUser);
     }
 
+    // Deletes a user
     public void deleteUser(long userId) {
         boolean exists = userRepository.existsById(userId);
         if (!exists){
-            throw new IllegalStateException("player with id " + userId + " does not exist.");
+            throw new IllegalStateException("User with id " + userId + " does not exist.");
         }
         userRepository.deleteById(userId);
     }
 
-    // ALlows changes to DOB, Name, and Email
+    // Allows changes to DOB, Name, and Email
     @Transactional
     public void updateUser(Long userId, UserEntity userUpdate) {
         System.out.println(userUpdate);
 
-        UserEntity currentPlayer = userRepository.findById(userId).orElseThrow(
-            () -> new IllegalStateException("Player with id " + userId + "does not exist.")
+        UserEntity currentUser = userRepository.findById(userId).orElseThrow(
+            () -> new IllegalStateException("User with id " + userId + "does not exist.")
         );
 
-        if (verifyEmail(userUpdate.getEmail())){
-            currentPlayer.setEmail(userUpdate.getEmail());
+        if (isEmailAvailable(userUpdate.getEmail())){
+            currentUser.setEmail(userUpdate.getEmail());
         }
         
         if (verifyName(userUpdate.getName())){
-            currentPlayer.setName(userUpdate.getName());
+            currentUser.setName(userUpdate.getName());
         }
 
         if (userUpdate.getDob() != null){
-            currentPlayer.setDob(userUpdate.getDob());
+            currentUser.setDob(userUpdate.getDob());
         }
     }
 
+    // Verifies name is valid
     public boolean verifyName(String name) {
         if (name != null && name.length() > 0) {
             return true;
@@ -76,7 +85,8 @@ public class UserService {
         return false;
     }
 
-    public boolean verifyEmail(String email) {
+    // Determines whether an email is available
+    public boolean isEmailAvailable(String email) {
         if (email == null || email.length() == 0) {
             return false;
         }
@@ -86,17 +96,17 @@ public class UserService {
         return true;
     }
 
-    public boolean verifyEmail(String email, Long userId) {
+    // Determines whether an email is available given a userId
+    public boolean isEmailAvailable(String email, Long userId) {
         if (email == null || email.length() == 0) {
             return false;
         }
-        Optional<UserEntity> p = userRepository.findByEmail(email);
-        if (p.isPresent()){
-            if (p.get().getId() == userId){
-                return true;
-            }
-            throw new IllegalStateException("email exists.");
+
+        UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalStateException("email exists."));
+        
+        if (user.getId() == userId){
+            return true;
         }
-        return true;
+        return false;
     }
 }

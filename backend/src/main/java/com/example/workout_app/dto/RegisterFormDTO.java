@@ -4,6 +4,13 @@ import java.time.LocalDate;
 
 import io.micrometer.common.lang.NonNull;
 
+/* To register a user, include the following:
+ * email
+ * password
+ * name
+ * dob
+ */
+
 public class RegisterFormDTO extends LoginFormDTO {
     @NonNull
     private String name;

@@ -31,22 +31,27 @@ public class UserController {
 
     @GetMapping
     public List<UserEntity> getMethodName() {
-        return userService.getPlayers();
+        return userService.getUsers();
     }
 
     @PostMapping
-    public void registerNewPlayer(@RequestBody RegisterFormDTO user) {
+    public void registerNewUser(@RequestBody RegisterFormDTO user) {
         userService.addNewUser(user);
     }
 
-    @DeleteMapping(path = "{playerId}")
-    public void deletePlayer(@PathVariable("playerId") Long id) {
+    @DeleteMapping(path = "{userId}")
+    public void deleteUser(@PathVariable("userId") Long id) {
         userService.deleteUser(id);
     }
 
-    @PutMapping("{playerId}")
-    public void updatePlayer(@PathVariable("playerId") Long playerId, @RequestBody UserEntity player) {
-        userService.updateUser(playerId, player);
+    @PutMapping("{userId}")
+    public void updateUser(@PathVariable("userId") Long userId, @RequestBody UserEntity user) {
+        userService.updateUser(userId, user);
+    }
+
+    @GetMapping("{userId}")
+    public String getUser(@PathVariable("userId") UserEntity user) {
+        return user.toString();
     }
 
     @GetMapping("/secured")
