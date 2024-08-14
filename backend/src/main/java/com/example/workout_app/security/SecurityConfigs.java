@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -27,14 +28,18 @@ public class SecurityConfigs {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .csrf((csrf) -> csrf.disable())
-            .authorizeHttpRequests( auth -> auth
+            .authorizeHttpRequests(auth -> auth
                 // auth.requestMatchers("/api/v1/user/secured").authenticated();
                 // auth.requestMatchers(HttpMethod.POST, "/api/v1/user").hasRole("ANONYMOUS");
-                .requestMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
                 // .requestMatchers("/").hasRole("ADMIN")
                 // .requestMatchers("/api/v1/**").hasRole("USER")
                 .anyRequest().hasAnyRole("ADMIN", "USER")
             )
+            // .oauth2ResourceServer(oauth2 -> oauth2
+            //     .jwt(Customizer.withDefaults())
+            // )
             .userDetailsService(jpaUserDetailsService)
             // .oauth2Login(Customizer.withDefaults())
             // .formLogin(Customizer.withDefaults())

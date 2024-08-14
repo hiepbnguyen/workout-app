@@ -4,10 +4,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.example.workout_app.dto.LoginFormDTO;
 import com.example.workout_app.dto.RegisterFormDTO;
 import com.example.workout_app.models.UserEntity;
 import com.example.workout_app.repositories.RoleRepository;
@@ -21,8 +26,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
+    private final AuthenticationManager authenticationManager;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager){
+        this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = passwordEncoder;
@@ -44,6 +51,12 @@ public class UserService {
         userRepository.save(newUser);
 
         System.out.println(newUser);
+    }
+
+    // Logins a user
+    public void loginUser(LoginFormDTO user) {
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     // Deletes a user
