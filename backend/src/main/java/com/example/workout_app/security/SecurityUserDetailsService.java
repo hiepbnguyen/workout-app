@@ -5,17 +5,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.workout_app.models.UserEntity;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.workout_app.repositories.UserRepository;
 
-import com.example.workout_app.models.SecurityUser;
-
 @Service
-public class JpaUserDetailsService implements UserDetailsService {
+public class SecurityUserDetailsService implements UserDetailsService {
+    @Autowired
     private UserRepository userRepository;
 
-    public JpaUserDetailsService(UserRepository userRepository) {
+    public SecurityUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

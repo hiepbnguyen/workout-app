@@ -1,10 +1,12 @@
-package com.example.workout_app.models;
+package com.example.workout_app.security;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.workout_app.models.UserEntity;
 
 import java.util.List;
 

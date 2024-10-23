@@ -32,5 +32,5 @@ public class RegisterFormDTO extends LoginFormDTO {
 
     public void setDob(LocalDate dob) {
         this.dob = dob;
-    }    
+    }
 }
