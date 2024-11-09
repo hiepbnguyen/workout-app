@@ -1,0 +1,14 @@
+Controller contains API endpoints
+DTO contains forms for communicating between the frontend and backend
+Models contains ORM data objects for the database
+Service contains the business logic between the repository and the Controller
+Repository contains the interface for the database, including queries
+
+Security contains configurations for authentication and authorization
+    "SecurityUser" implements "UserDetails" in a way where it uses data from the "UserEntity" class to authenticate users
+    SecurityUserDetailService implements a method for getting the SecurityUser via a username
+    The SecurityUserDetailService is then wrapped into the SecurityFilterChain as a UserDetailService
+
+    The SecurityConfigs contains configs for cors, the security filter chain, authentication manager, and the password encoder.
+
+Use RestClient instead of RestTemplate. Use WebClient for async or streaming services.
