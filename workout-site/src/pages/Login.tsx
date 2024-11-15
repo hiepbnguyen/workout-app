@@ -10,8 +10,36 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { DatePicker } from "@/components/ui/datepicker"
+import { useState, useEffect } from "react"
+import axios from 'axios'
 
 export default function Login() {
+  const [username, setUsername] = useState<string>()
+  const [name, setName] = useState<string>()
+  const [password, setPassword] = useState<string>()
+  const [date, setDate] = useState<Date>()
+
+  useEffect(() => {
+    console.log(username)
+    console.log(date?.getDay() + " " + date?.getFullYear() + " " + date?.getMonth())
+  },
+    [date, username]
+  )
+
+  const submitCreateAccount = async () => {
+    if (username != undefined && password != undefined && date != undefined && name != undefined) {
+      let form = new FormData()
+      form.append("email", username)
+      form.append("password", username)
+      form.append("name", name)
+      // form.append("dob", date.toISOString()) TODO
+      const response = await axios.post("http://localhost:8080/api/v1/user/register", form)
+      console.log(response)
+      console.log(response.status)
+    }
+  }
+
   return (
     <div className="flex h-screen justify-center items-center">
       <Tabs defaultValue="login" className="w-[300px]">
@@ -21,17 +49,17 @@ export default function Login() {
         </TabsList>
 
 
-        <TabsContent value="login" className="space-y-5">
+        <TabsContent value="login" className="space-y-3">
           <div className="space-y-1">
             <Label htmlFor="email">Email</Label>
-            <Input placeholder="Enter your email here"></Input>
+            <Input placeholder="Enter your email here" value={username} onChange={e => {setUsername(e.target.value)}}></Input>
           </div>
           <div className="space-y-1">
             <Label htmlFor="password">Password</Label>
-            <Input placeholder="Enter your password here"></Input>
+            <Input placeholder="Enter your password here" value={password} onChange={e => {setPassword(e.target.value)}}></Input>
           </div>
+          <div className="flex w-full justify-center flex-col space-y-4">
           <Button className="w-full"> Sign in </Button>
-          <div className="flex w-full justify-center">
             <Dialog>
               <DialogTrigger>
                 <Button variant="outline">Forgot Password?</Button>
@@ -51,9 +79,26 @@ export default function Login() {
         </TabsContent>
 
 
-        <TabsContent value="signup">
-          Change your password here.
-          <Input></Input>
+        <TabsContent value="signup" className="space-y-3">
+          <div className="space-y-1">
+            <Label htmlFor="signup-email">Email</Label>
+            <Input placeholder="Enter your email here" value={username} onChange={e => {setUsername(e.target.value)}}></Input>
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="signup-email">Name</Label>
+            <Input placeholder="Enter your name here" value={name} onChange={e => {setName(e.target.value)}}></Input>
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="singup-dob">Date of Birth</Label>
+            <DatePicker date={date} setDate={setDate}></DatePicker>
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="signup-password">Password</Label>
+            <Input placeholder="Enter your password here" value={password} onChange={e => {setPassword(e.target.value)}}></Input>
+          </div>
+          <div className="flex w-full justify-center">
+            <Button className="w-[70%]" onClick={submitCreateAccount}>Create Account</Button>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

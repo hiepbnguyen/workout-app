@@ -1,5 +1,6 @@
 version: '3.8'
 
+name: workout-app
 services:
   # backend:
   #   env_file: ".env"
@@ -23,7 +24,7 @@ services:
   db:
     env_file: ".env"
     image: postgres
-    container_name: db
+    container_name: workout-db
     environment:
       - POSTGRES_USER=$POSTGRES_USERNAME
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD

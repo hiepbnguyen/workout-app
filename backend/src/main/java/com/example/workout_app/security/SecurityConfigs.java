@@ -43,7 +43,7 @@ public class SecurityConfigs {
             .authorizeHttpRequests(auth -> auth
                 // auth.requestMatchers("/api/v1/user/secured").authenticated();
                 // auth.requestMatchers(HttpMethod.POST, "/api/v1/user").hasRole("ANONYMOUS");
-                .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/user/register").hasRole("ANONYMOUS")
                 .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
                 // .requestMatchers("/").hasRole("ADMIN")
                 // .requestMatchers("/api/v1/**").hasRole("USER")
@@ -53,9 +53,9 @@ public class SecurityConfigs {
             //     .jwt(Customizer.withDefaults())
             // )
             .userDetailsService(jpaUserDetailsService)
-            .oauth2Login(Customizer.withDefaults())
-            .formLogin(Customizer.withDefaults())
-            .httpBasic(Customizer.withDefaults())
+            // .oauth2Login(Customizer.withDefaults())
+            // .formLogin(Customizer.withDefaults())
+            // .httpBasic(Customizer.withDefaults())
             .build();
     }
 
