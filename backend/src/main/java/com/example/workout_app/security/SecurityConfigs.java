@@ -39,12 +39,13 @@ public class SecurityConfigs {
         return http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 // auth.requestMatchers("/api/v1/user/secured").authenticated();
                 // auth.requestMatchers(HttpMethod.POST, "/api/v1/user").hasRole("ANONYMOUS");
-                .requestMatchers(HttpMethod.POST, "/api/v1/user/register").hasRole("ANONYMOUS")
+                .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/user/secured").permitAll()
                 // .requestMatchers("/").hasRole("ADMIN")
                 // .requestMatchers("/api/v1/**").hasRole("USER")
                 .anyRequest().hasAnyRole("ADMIN", "USER")
@@ -53,6 +54,10 @@ public class SecurityConfigs {
             //     .jwt(Customizer.withDefaults())
             // )
             .userDetailsService(jpaUserDetailsService)
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .maximumSessions(1)
+            )
             // .oauth2Login(Customizer.withDefaults())
             // .formLogin(Customizer.withDefaults())
             // .httpBasic(Customizer.withDefaults())

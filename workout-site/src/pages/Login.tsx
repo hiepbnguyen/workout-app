@@ -31,13 +31,40 @@ export default function Login() {
     if (username != undefined && password != undefined && date != undefined && name != undefined) {
       let form = new FormData()
       form.append("email", username)
-      form.append("password", username)
+      form.append("password", password)
       form.append("name", name)
       // form.append("dob", date.toISOString()) TODO
       const response = await axios.post("http://localhost:8080/api/v1/user/register", form)
       console.log(response)
       console.log(response.status)
     }
+  }
+
+  const submitLogin = async () => {
+    if (username != undefined && password != undefined) {
+      let form = new FormData()
+      form.append("email", username)
+      form.append("password", password)
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/user/login",
+        form, {
+          withCredentials: true
+        }
+      )
+      console.log(response)
+      console.log(response.status)
+      printuser()
+    }
+  }
+
+  const printuser = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/user/secured", {
+        withCredentials: true
+      }
+    )
+    console.log(response)
+    console.log(response.status)
   }
 
   return (
@@ -52,14 +79,14 @@ export default function Login() {
         <TabsContent value="login" className="space-y-3">
           <div className="space-y-1">
             <Label htmlFor="email">Email</Label>
-            <Input placeholder="Enter your email here" value={username} onChange={e => {setUsername(e.target.value)}}></Input>
+            <Input placeholder="Enter your email" value={username} onChange={e => {setUsername(e.target.value)}}></Input>
           </div>
           <div className="space-y-1">
             <Label htmlFor="password">Password</Label>
-            <Input placeholder="Enter your password here" value={password} onChange={e => {setPassword(e.target.value)}}></Input>
+            <Input placeholder="Enter your password" value={password} onChange={e => {setPassword(e.target.value)}}></Input>
           </div>
           <div className="flex w-full justify-center flex-col space-y-4">
-          <Button className="w-full"> Sign in </Button>
+          <Button className="w-full" onClick={submitLogin}> Sign in </Button>
             <Dialog>
               <DialogTrigger>
                 <Button variant="outline">Forgot Password?</Button>
@@ -82,11 +109,11 @@ export default function Login() {
         <TabsContent value="signup" className="space-y-3">
           <div className="space-y-1">
             <Label htmlFor="signup-email">Email</Label>
-            <Input placeholder="Enter your email here" value={username} onChange={e => {setUsername(e.target.value)}}></Input>
+            <Input placeholder="Enter your email" value={username} onChange={e => {setUsername(e.target.value)}}></Input>
           </div>
           <div className="space-y-1">
             <Label htmlFor="signup-email">Name</Label>
-            <Input placeholder="Enter your name here" value={name} onChange={e => {setName(e.target.value)}}></Input>
+            <Input placeholder="Enter your name" value={name} onChange={e => {setName(e.target.value)}}></Input>
           </div>
           <div className="space-y-1">
             <Label htmlFor="singup-dob">Date of Birth</Label>
@@ -94,7 +121,7 @@ export default function Login() {
           </div>
           <div className="space-y-1">
             <Label htmlFor="signup-password">Password</Label>
-            <Input placeholder="Enter your password here" value={password} onChange={e => {setPassword(e.target.value)}}></Input>
+            <Input placeholder="Enter your password" value={password} onChange={e => {setPassword(e.target.value)}}></Input>
           </div>
           <div className="flex w-full justify-center">
             <Button className="w-[70%]" onClick={submitCreateAccount}>Create Account</Button>

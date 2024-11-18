@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,8 +60,12 @@ public class UserService {
 
     // Logins a user
     public void loginUser(LoginFormDTO user) {
+        // Checks if credentials are valid. If so, continue. If not, throw exception
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+
         SecurityContextHolder.getContext().setAuthentication(auth);
+        // String session = ((WebAuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails()).getSessionId();
+        // System.out.println("SESSION IS: " + session);
     }
 
     // Deletes a user
