@@ -23,6 +23,13 @@ export default function Login() {
   useEffect(() => {
     console.log(username)
     console.log(date?.getDay() + " " + date?.getFullYear() + " " + date?.getMonth())
+    console.log(date?.toDateString())
+    console.log(date?.getUTCDate())
+    // const isodate: string = `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`
+    const isodate: string | undefined = date?.toISOString().substring(0,10)
+    
+    console.log(isodate)
+    console.log(date?.toISOString())
   },
     [date, username]
   )
@@ -33,7 +40,8 @@ export default function Login() {
       form.append("email", username)
       form.append("password", password)
       form.append("name", name)
-      // form.append("dob", date.toISOString()) TODO
+      const isodate: string = date.toISOString().substring(0,10)
+      form.append("dob", isodate)
       const response = await axios.post("http://localhost:8080/api/v1/user/register", form)
       console.log(response)
       console.log(response.status)

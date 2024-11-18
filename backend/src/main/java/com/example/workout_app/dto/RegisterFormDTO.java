@@ -2,6 +2,9 @@ package com.example.workout_app.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 import io.micrometer.common.lang.NonNull;
 
 /* To register a user, include the following:
@@ -16,6 +19,7 @@ public class RegisterFormDTO extends LoginFormDTO {
     private String name;
 
     @NonNull
+    @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)
     private LocalDate dob;
 
     public String getName() {
