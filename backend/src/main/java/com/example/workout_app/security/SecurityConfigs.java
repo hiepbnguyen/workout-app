@@ -45,10 +45,10 @@ public class SecurityConfigs {
                 // auth.requestMatchers(HttpMethod.POST, "/api/v1/user").hasRole("ANONYMOUS");
                 .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/user/secured").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/user/secured").authenticated()
                 // .requestMatchers("/").hasRole("ADMIN")
                 // .requestMatchers("/api/v1/**").hasRole("USER")
-                .anyRequest().hasAnyRole("ADMIN", "USER")
+                .anyRequest().authenticated()
             )
             // .oauth2ResourceServer(oauth2 -> oauth2
             //     .jwt(Customizer.withDefaults())

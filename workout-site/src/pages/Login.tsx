@@ -13,26 +13,32 @@ import {
 import { DatePicker } from "@/components/ui/datepicker"
 import { useState, useEffect } from "react"
 import axios from 'axios'
+import { useAuth } from "@/lib/AuthProvider"
+import { useNavigate } from "react-router-dom"
 
 export default function Login() {
-  const [username, setUsername] = useState<string>()
-  const [name, setName] = useState<string>()
-  const [password, setPassword] = useState<string>()
+  const [username, setUsername] = useState<string>("")
+  const [name, setName] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
   const [date, setDate] = useState<Date>()
+  const {isAuthenticated, setIsAuthenticated} = useAuth()
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    console.log(username)
-    console.log(date?.getDay() + " " + date?.getFullYear() + " " + date?.getMonth())
-    console.log(date?.toDateString())
-    console.log(date?.getUTCDate())
-    // const isodate: string = `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`
-    const isodate: string | undefined = date?.toISOString().substring(0,10)
+  // useEffect(() => {
+  //   // const isodate: string = `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`
+  //   const isodate: string | undefined = date?.toISOString().substring(0,10)
     
-    console.log(isodate)
-    console.log(date?.toISOString())
-  },
-    [date, username]
-  )
+  //   console.log(isodate)
+  //   console.log(date?.toISOString())
+  // },
+  //   [date, username]
+  // )
+
+  // useEffect(() => {
+  //   if (isAuthenticated == true) {
+  //     navigate("/")
+  //   }
+  // }, [isAuthenticated])
 
   const submitCreateAccount = async () => {
     if (username != undefined && password != undefined && date != undefined && name != undefined) {
@@ -53,15 +59,23 @@ export default function Login() {
       let form = new FormData()
       form.append("email", username)
       form.append("password", password)
-      const response = await axios.post(
+      axios.post(
         "http://localhost:8080/api/v1/user/login",
         form, {
           withCredentials: true
         }
-      )
-      console.log(response)
-      console.log(response.status)
-      printuser()
+      ).then(resp => {
+        console.log(resp)
+        console.log(resp.status)
+        printuser()
+        if (resp.status === 200) {
+          setIsAuthenticated(true)
+          navigate("/")
+          console.log("Worky")
+        } else {
+          console.log("No Worky: " + resp.status)
+        }
+      })
     }
   }
 
@@ -94,10 +108,11 @@ export default function Login() {
             <Input placeholder="Enter your password" value={password} onChange={e => {setPassword(e.target.value)}}></Input>
           </div>
           <div className="flex w-full justify-center flex-col space-y-4">
-          <Button className="w-full" onClick={submitLogin}> Sign in </Button>
+            <Button className="w-full" onClick={submitLogin}> Sign in </Button>
             <Dialog>
-              <DialogTrigger>
-                <Button variant="outline">Forgot Password?</Button>
+              <DialogTrigger className="w-[80%] m-[10%]">
+                Forgot Password?
+                {/* <Button variant="outline"></Button> */}
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
