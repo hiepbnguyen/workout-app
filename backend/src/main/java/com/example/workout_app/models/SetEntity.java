@@ -91,8 +91,8 @@ public class SetEntity {
         time = builder.time;
     }
 
-    @Override
-    public String toString() {
-        return "Set [weight=" + weight + ", reps=" + reps + ", time=" + time + "]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "Set [weight=" + weight + ", reps=" + reps + ", time=" + time + "]";
+    // }
 }

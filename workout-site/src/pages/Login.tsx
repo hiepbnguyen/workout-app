@@ -17,16 +17,16 @@ import { useAuth } from "@/lib/AuthProvider"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
-const registerForm = z.object({
-  username: z.string().email().min(1),
-  name: z.string().min(1).max(40),
-  password: z.string().min(6).max(25),
-  dob: z.date(),
+const registerSchema = z.object({
+  username: z.string().email({message: "Please enter a valid email."}).min(1, {message: "Field cannot be blank."}),
+  name: z.string().min(1, {message: "Field cannot be blank."}).max(64, {message: "Name must be less than 64 characters long"}),
+  password: z.string().min(6, {message: "Password must be at least 6 characters long."}).max(25, {message: "Password must have 25 or less characters."}),
+  dob: z.coerce.date(),
 })
 
 
 export default function Login() {
-  const [username, setUsername] = useState<string>("avatre")
+  const [username, setUsername] = useState<string>("avatre@mail.com")
   const [name, setName] = useState<string>("ava")
   const [password, setPassword] = useState<string>("avatre")
   const [date, setDate] = useState<Date>(new Date("1997-12-11"))
@@ -50,12 +50,21 @@ export default function Login() {
   // }, [isAuthenticated])
 
   const submitCreateAccount = async () => {
+    const registerFields = {
+      username: username,
+      name: name,
+      password: password,
+      dob: date
+    }
+
+    const parsed = registerSchema.parse(registerFields)
+
     if (username != undefined && password != undefined && date != undefined && name != undefined) {
       let form = new FormData()
-      form.append("email", username)
-      form.append("password", password)
-      form.append("name", name)
-      const isodate: string = date.toISOString().substring(0,10)
+      form.append("email", parsed.username)
+      form.append("password", parsed.password)
+      form.append("name", parsed.name)
+      const isodate: string = parsed.dob.toISOString().substring(0,10)
       form.append("dob", isodate)
       const response = await axios.post("http://localhost:8080/api/v1/user/register", form)
       console.log(response)

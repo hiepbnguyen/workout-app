@@ -77,8 +77,8 @@ public class UserController {
     }
 
     @GetMapping("{userId}")
-    public String getUser(@PathVariable("userId") UserEntity user) {
-        return user.toString();
+    public ResponseEntity<UserEntity> getUser(@PathVariable("userId") UserEntity user) {
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("secured")
