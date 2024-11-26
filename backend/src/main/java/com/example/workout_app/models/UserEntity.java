@@ -22,13 +22,12 @@ public class UserEntity {
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
-    private String email;
-    private String password;
-    private String name;
-    private LocalDate dob;
 
     @OneToMany(mappedBy = "userEntity")
-    private List<Day> days;
+    private List<Routine> routines;
+
+    @OneToMany(mappedBy = "userEntity")
+    private List<RoutineLog> routineLogs;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -38,6 +37,11 @@ public class UserEntity {
     )
     private List<Role> roles;
 
+    private String email;
+    private String password;
+    private String name;
+    private LocalDate dob;
+    
     public UserEntity() {}
 
     public UserEntity(String email, String password, String name, LocalDate dob, List<Role> roles) {
@@ -57,11 +61,11 @@ public class UserEntity {
     public void setName(String name) {
         this.name = name;
     }
-    public List<Day> getDays() {
-        return days;
+    public List<Routine> getRoutines() {
+        return routines;
     }
-    public void setDays(List<Day> days) {
-        this.days = days;
+    public void setRoutines(List<Routine> routines) {
+        this.routines = routines;
     }
     public LocalDate getDob() {
         return dob;
@@ -90,6 +94,6 @@ public class UserEntity {
 
     @Override
     public String toString() {
-        return "UserEntity [id=" + id + ", name=" + name + ", dob=" + dob + ", days=" + days + "]";
+        return "Using the toString function in Java: UserEntity [id=" + id + ", name=" + name + ", dob=" + dob + ", routines=" + routines + "]";
     }
 }

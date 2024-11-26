@@ -14,24 +14,20 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table
-public class SetEntity {
+public class WorkSet {
     @Id
     @SequenceGenerator(name = "set_sequence", sequenceName = "set_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "set_sequence")
     private long id;
-    
-    private float weight = -1;
-
-    private int reps = -1;
-
-    private LocalTime time = null;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workout_id")
     private Workout workout;
 
-
-
+    private int setNumber = -1;
+    private int reps = -1;
+    private float weight = -1;
+    private LocalTime time = null;
 
     public float getWeight() {
         return weight;
@@ -80,12 +76,12 @@ public class SetEntity {
             return this;
         }
 
-        public SetEntity build(){
-            return new SetEntity(this);
+        public WorkSet build(){
+            return new WorkSet(this);
         }
     }
 
-    private SetEntity(Builder builder){
+    private WorkSet(Builder builder){
         weight = builder.weight;
         reps = builder.reps;
         time = builder.time;
