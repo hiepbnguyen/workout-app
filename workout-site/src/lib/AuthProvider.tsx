@@ -26,12 +26,16 @@ export default function AuthProvider({children}: {children: any}) {
         withCredentials: true
       }
     ).then(response => {
-      if (response.status=== 403) {
+      if (response.status === 403) {
         setIsAuthenticated(false)
       } else {
         setIsAuthenticated(true)
       }
     }).catch(e => {
+      if (e.code == axios.AxiosError.ERR_NETWORK) {
+        console.error("Cannot connect to server")
+      }
+
       console.log("Error while trying to prove authentication: " + e)
       setIsAuthenticated(false)
     })

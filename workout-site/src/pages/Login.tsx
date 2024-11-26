@@ -15,12 +15,21 @@ import { useState, useEffect } from "react"
 import axios from 'axios'
 import { useAuth } from "@/lib/AuthProvider"
 import { useNavigate } from "react-router-dom"
+import { z } from "zod"
+
+const registerForm = z.object({
+  username: z.string().email().min(1),
+  name: z.string().min(1).max(40),
+  password: z.string().min(6).max(25),
+  dob: z.date(),
+})
+
 
 export default function Login() {
-  const [username, setUsername] = useState<string>("")
-  const [name, setName] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
-  const [date, setDate] = useState<Date>()
+  const [username, setUsername] = useState<string>("avatre")
+  const [name, setName] = useState<string>("ava")
+  const [password, setPassword] = useState<string>("avatre")
+  const [date, setDate] = useState<Date>(new Date("1997-12-11"))
   const {isAuthenticated, setIsAuthenticated} = useAuth()
   const navigate = useNavigate()
 
@@ -110,7 +119,7 @@ export default function Login() {
           <div className="flex w-full justify-center flex-col space-y-4">
             <Button className="w-full" onClick={submitLogin}> Sign in </Button>
             <Dialog>
-              <DialogTrigger className="w-[80%] m-[10%]">
+              <DialogTrigger className="w-fit self-center">
                 Forgot Password?
                 {/* <Button variant="outline"></Button> */}
               </DialogTrigger>
