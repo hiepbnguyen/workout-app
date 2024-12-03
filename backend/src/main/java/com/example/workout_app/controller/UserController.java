@@ -5,12 +5,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.workout_app.dto.LoginFormDTO;
 import com.example.workout_app.dto.RegisterFormDTO;
 import com.example.workout_app.models.UserEntity;
-import com.example.workout_app.security.SecurityUser;
 import com.example.workout_app.service.UserService;
-import com.nimbusds.jose.proc.SecurityContext;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -49,13 +48,17 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public String registerNewUser(@ModelAttribute RegisterFormDTO user, HttpServletRequest request) {
-        userService.addNewUser(user);
+    public String registerNewUser(@ModelAttribute @Valid RegisterFormDTO registerForm, HttpServletRequest request) {
+        // Validates password
+        registerForm.validatePassword();
+
+        // Adds new user into database
+        userService.addNewUser(registerForm);
         return "User registered successfully";
     }
 
     @PostMapping("login")
-    public ResponseEntity<String> loginUser(@ModelAttribute LoginFormDTO user, HttpServletRequest request) {
+    public ResponseEntity<String> loginUser(@ModelAttribute @Valid LoginFormDTO user, HttpServletRequest request) {
         // Attempts to log in the user
         userService.loginUser(user);
 

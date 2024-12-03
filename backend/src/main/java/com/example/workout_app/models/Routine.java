@@ -1,6 +1,8 @@
 package com.example.workout_app.models;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +23,7 @@ public class Routine {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "routine_seq")
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
@@ -31,7 +34,6 @@ public class Routine {
 
     @OneToMany(mappedBy = "refRoutine")
     private List<RoutineLog> routineLogs;
-
 
     public Long getId() {
         return id;
