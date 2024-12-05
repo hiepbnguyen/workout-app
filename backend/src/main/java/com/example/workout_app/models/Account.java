@@ -19,22 +19,22 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table
-public class UserEntity {
+public class Account {
     @Id
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+    @SequenceGenerator(name = "account_seq", sequenceName = "account_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
     private Long id;
 
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "account")
     private List<Routine> routines;
 
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "account")
     private List<RoutineLog> routineLogs;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
-        name = "user_roles",
-        joinColumns = @JoinColumn(name = "user_id"),
+        name = "account_roles",
+        joinColumns = @JoinColumn(name = "account_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roles;
@@ -44,9 +44,9 @@ public class UserEntity {
     private String name;
     private LocalDate dob;
     
-    public UserEntity() {}
+    public Account() {}
 
-    public UserEntity(String email, String password, String name, LocalDate dob, List<Role> roles) {
+    public Account(String email, String password, String name, LocalDate dob, List<Role> roles) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -96,6 +96,6 @@ public class UserEntity {
 
     @Override
     public String toString() {
-        return "Using the toString function in Java: UserEntity [id=" + id + ", name=" + name + ", dob=" + dob + ", routines=" + routines + "]";
+        return "Using the toString function in Java: Account [id=" + id + ", name=" + name + ", dob=" + dob + ", routines=" + routines + "]";
     }
 }

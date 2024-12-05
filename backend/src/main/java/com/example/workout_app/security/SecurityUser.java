@@ -6,31 +6,31 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.workout_app.models.UserEntity;
+import com.example.workout_app.models.Account;
 
 import java.util.List;
 
 public class SecurityUser implements UserDetails {
 
-    private UserEntity user;
+    private Account account;
 
-    public SecurityUser(UserEntity user) {
-        this.user = user;
+    public SecurityUser(Account account) {
+        this.account = account;
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return account.getEmail();
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return account.getPassword();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> u = user
+        List<SimpleGrantedAuthority> u = account
             .getRoles()
             .stream()
             .map(role -> new SimpleGrantedAuthority(role.getName()))
@@ -38,7 +38,7 @@ public class SecurityUser implements UserDetails {
 
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         u.forEach( x -> System.out.println(x));
-        return user
+        return account
             .getRoles()
             .stream()
             .map(role -> new SimpleGrantedAuthority(role.getName()))
@@ -72,11 +72,11 @@ public class SecurityUser implements UserDetails {
         return UserDetails.super.isEnabled();
     }
     
-    public UserEntity getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

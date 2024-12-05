@@ -25,8 +25,8 @@ public class Routine {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     @ManyToMany(mappedBy = "routines")
     private List<Workout> workouts;
@@ -41,11 +41,11 @@ public class Routine {
     public void setId(Long id) {
         this.id = id;
     }
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public Account getAccount() {
+        return account;
     }
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setAccount(Account account) {
+        this.account = account;
     }
     public List<Workout> getWorkouts() {
         return workouts;

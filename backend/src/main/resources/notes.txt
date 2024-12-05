@@ -5,7 +5,7 @@ Service contains the business logic between the repository and the Controller
 Repository contains the interface for the database, including queries
 
 Security contains configurations for authentication and authorization
-    "SecurityUser" implements "UserDetails" in a way where it uses data from the "UserEntity" class to authenticate users
+    "SecurityUser" implements "UserDetails" in a way where it uses data from the "Account" class to authenticate users
     SecurityUserDetailService implements a method for getting the SecurityUser via a username
     The SecurityUserDetailService is then wrapped into the SecurityFilterChain as a UserDetailService
 

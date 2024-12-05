@@ -16,16 +16,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.example.workout_app.dto.LoginFormDTO;
 import com.example.workout_app.dto.RegisterFormDTO;
-import com.example.workout_app.models.UserEntity;
+import com.example.workout_app.models.Account;
 import com.example.workout_app.repositories.RoleRepository;
-import com.example.workout_app.repositories.UserRepository;
+import com.example.workout_app.repositories.AccountRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class UserService {
+public class AccountService {
     @Autowired
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     @Autowired
     private final RoleRepository roleRepository;
     @Autowired
@@ -33,69 +33,69 @@ public class UserService {
     @Autowired
     private final AuthenticationManager authenticationManager;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager){
+    public AccountService(AccountRepository accountRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager){
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
         this.encoder = passwordEncoder;
     }
 
-    public List<UserEntity> getUsers() {
-        return userRepository.findAll();
+    public List<Account> getAccounts() {
+        return accountRepository.findAll();
     }
 
-    // Adds a new user
-    public void addNewUser(RegisterFormDTO user) {
+    // Adds a new account
+    public void addNewAccount(RegisterFormDTO account) {
         // Throws error if email is unavailable
-        if (userRepository.existsByEmail(user.getEmail())){
+        if (accountRepository.existsByEmail(account.getEmail())){
             throw new IllegalStateException("email taken");
         }
         
-        UserEntity newUser = new UserEntity(user.getEmail(), encoder.encode(user.getPassword()), user.getName(), user.getDob(), Collections.singletonList(roleRepository.findByName("ROLE_USER").orElseThrow()));
+        Account newAccount = new Account(account.getEmail(), encoder.encode(account.getPassword()), account.getName(), account.getDob(), Collections.singletonList(roleRepository.findByName("ROLE_USER").orElseThrow()));
 
-        userRepository.save(newUser);
+        accountRepository.save(newAccount);
 
-        System.out.println(newUser);
+        System.out.println(newAccount);
     }
 
-    // Logins a user
-    public void loginUser(LoginFormDTO user) {
+    // Logins an account
+    public void loginAccount(LoginFormDTO loginForm) {
         // Checks if credentials are valid. If so, continue. If not, throw exception
-        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.getEmail(), loginForm.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(auth);
         // String session = ((WebAuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails()).getSessionId();
         // System.out.println("SESSION IS: " + session);
     }
 
-    // Deletes a user
-    public void deleteUser(long userId) {
-        boolean exists = userRepository.existsById(userId);
+    // Deletes an account
+    public void deleteAccount(long accountId) {
+        boolean exists = accountRepository.existsById(accountId);
         if (!exists){
-            throw new IllegalStateException("User with id " + userId + " does not exist.");
+            throw new IllegalStateException("Account with id " + accountId + " does not exist.");
         }
-        userRepository.deleteById(userId);
+        accountRepository.deleteById(accountId);
     }
 
     // Allows changes to DOB, Name, and Email
     @Transactional
-    public void updateUser(Long userId, UserEntity userUpdate) {
-        System.out.println(userUpdate);
+    public void updateAccount(Long accountId, Account accountUpdate) {
+        System.out.println(accountUpdate);
 
-        UserEntity currentUser = userRepository.findById(userId).orElseThrow(
-            () -> new IllegalStateException("User with id " + userId + "does not exist.")
+        Account currentAccount = accountRepository.findById(accountId).orElseThrow(
+            () -> new IllegalStateException("Account with id " + accountId + "does not exist.")
         );
 
-        if (isEmailAvailable(userUpdate.getEmail())){
-            currentUser.setEmail(userUpdate.getEmail());
+        if (isEmailAvailable(accountUpdate.getEmail())){
+            currentAccount.setEmail(accountUpdate.getEmail());
         }
         
-        if (verifyName(userUpdate.getName())){
-            currentUser.setName(userUpdate.getName());
+        if (verifyName(accountUpdate.getName())){
+            currentAccount.setName(accountUpdate.getName());
         }
 
-        if (userUpdate.getDob() != null){
-            currentUser.setDob(userUpdate.getDob());
+        if (accountUpdate.getDob() != null){
+            currentAccount.setDob(accountUpdate.getDob());
         }
     }
 
@@ -112,21 +112,21 @@ public class UserService {
         if (email == null || email.length() == 0) {
             return false;
         }
-        if (userRepository.findByEmail(email).isPresent()){
+        if (accountRepository.findByEmail(email).isPresent()){
             throw new IllegalStateException("email exists.");
         }
         return true;
     }
 
-    // Determines whether an email is available given a userId
-    public boolean isEmailAvailable(String email, Long userId) {
+    // Determines whether an email is available given an accountId
+    public boolean isEmailAvailable(String email, Long accountId) {
         if (email == null || email.length() == 0) {
             return false;
         }
 
-        UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalStateException("email exists."));
+        Account account = accountRepository.findByEmail(email).orElseThrow(() -> new IllegalStateException("email exists."));
         
-        if (user.getId() == userId){
+        if (account.getId() == accountId){
             return true;
         }
         return false;

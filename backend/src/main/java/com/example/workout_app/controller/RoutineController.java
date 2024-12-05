@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.workout_app.models.Routine;
-import com.example.workout_app.models.UserEntity;
+import com.example.workout_app.models.Account;
 import com.example.workout_app.security.SecurityUser;
 import com.example.workout_app.service.RoutineService;
 
@@ -29,15 +29,15 @@ public class RoutineController {
 
     @PostMapping()
     public ResponseEntity<Routine> createRoutine(@RequestParam String name) {
-        // Retrieves UserEntity from Security Context Holder
+        // Retrieves Account from Security Context Holder
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         SecurityUser securityUser = (SecurityUser) auth.getPrincipal();
-        UserEntity user = securityUser.getUser();
+        Account account = securityUser.getAccount();
 
-        // Creates a new Routine with a Name and UserEntity
+        // Creates a new Routine with a Name and Account
         Routine newRoutine = new Routine();
         newRoutine.setName(name);
-        newRoutine.setUserEntity(user);
+        newRoutine.setAccount(account);
 
         // Saves routine to database
         routineService.createRoutine(newRoutine);

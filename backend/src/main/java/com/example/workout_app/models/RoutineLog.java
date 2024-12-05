@@ -23,8 +23,8 @@ public class RoutineLog {
     long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     @ManyToMany(mappedBy = "routineLogs")
     private List<WorkoutLog> workoutLogs;
@@ -44,11 +44,11 @@ public class RoutineLog {
     public void setId(long id) {
         this.id = id;
     }
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public Account getAccount() {
+        return account;
     }
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setAccount(Account account) {
+        this.account = account;
     }
     public List<WorkoutLog> getWorkoutLogs() {
         return workoutLogs;

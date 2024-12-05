@@ -10,9 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.workout_app.models.Role;
-import com.example.workout_app.models.UserEntity;
+import com.example.workout_app.models.Account;
 import com.example.workout_app.repositories.RoleRepository;
-import com.example.workout_app.repositories.UserRepository;
+import com.example.workout_app.repositories.AccountRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,7 +27,7 @@ public class Application {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(UserRepository users, RoleRepository roles, PasswordEncoder encoder) {
+	CommandLineRunner commandLineRunner(AccountRepository accounts, RoleRepository roles, PasswordEncoder encoder) {
 		return args -> {
 			Role userRole = new Role("ROLE_USER");
 			Role adminRole = new Role("ROLE_ADMIN");
@@ -35,7 +35,7 @@ public class Application {
 			roles.save(userRole);
 			roles.save(adminRole);
 
-			// users.save(new UserEntity(
+			// accounts.save(new Account(
 			// 	"hiep@gmail.com",
 			// 	encoder.encode("banana"),
 			// 	"Hiep",
@@ -46,7 +46,7 @@ public class Application {
 			// 	)
 			// ));
 			
-			// users.save(new UserEntity(
+			// accounts.save(new Account(
 			// 	"apple@gmail.com",
 			// 	encoder.encode("banana"),
 			// 	"apple",

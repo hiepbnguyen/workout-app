@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.workout_app.dto.LoginFormDTO;
 import com.example.workout_app.dto.RegisterFormDTO;
-import com.example.workout_app.models.UserEntity;
-import com.example.workout_app.service.UserService;
+import com.example.workout_app.models.Account;
+import com.example.workout_app.service.AccountService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -37,30 +37,32 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping(path = "/api/v1/user")
 public class UserController {
     @Autowired
-    private final UserService userService;
-    public UserController(UserService userService) {
-        this.userService = userService;
+    private final AccountService accountService;
+    public UserController(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @GetMapping
-    public List<UserEntity> getMethodName() {
-        return userService.getUsers();
+    public List<Account> getMethodName() {
+        return accountService.getAccounts();
     }
 
+    // Registers user using form
     @PostMapping("register")
     public String registerNewUser(@ModelAttribute @Valid RegisterFormDTO registerForm, HttpServletRequest request) {
         // Validates password
         registerForm.validatePassword();
 
         // Adds new user into database
-        userService.addNewUser(registerForm);
+        accountService.addNewAccount(registerForm);
         return "User registered successfully";
     }
-
+    
+    // Logins user using form
     @PostMapping("login")
-    public ResponseEntity<String> loginUser(@ModelAttribute @Valid LoginFormDTO user, HttpServletRequest request) {
+    public ResponseEntity<String> loginUser(@ModelAttribute @Valid LoginFormDTO loginForm, HttpServletRequest request) {
         // Attempts to log in the user
-        userService.loginUser(user);
+        accountService.loginAccount(loginForm);
 
         // Creates a new session, and stores the session in the HttpSessionSecurityContextRepository to be called in for future requests.
         HttpSession session = request.getSession(true);
@@ -69,21 +71,27 @@ public class UserController {
         return new ResponseEntity<>("User signed in successfully", HttpStatus.OK);
     }
 
+    // Deletes user based on path variable
     @DeleteMapping(path = "{userId}")
     public void deleteUser(@PathVariable("userId") Long id) {
-        userService.deleteUser(id);
+        accountService.deleteAccount(id);
     }
 
-    @PutMapping("{userId}")
-    public void updateUser(@PathVariable("userId") Long userId, @RequestBody UserEntity user) {
-        userService.updateUser(userId, user);
+    // TODO: Change user param into a DTO
+    // Updates user using ???
+    @PutMapping("{accountId}")
+    public void updateUser(@PathVariable("accountId") Long accountId, @RequestBody Account account) {
+        accountService.updateAccount(accountId, account);
     }
 
-    @GetMapping("{userId}")
-    public ResponseEntity<UserEntity> getUser(@PathVariable("userId") UserEntity user) {
-        return ResponseEntity.ok(user);
+    // Returns user account info
+    @GetMapping("{accountId}")
+    public ResponseEntity<Account> getAccount(@PathVariable("accountId") Account account) {
+        return ResponseEntity.ok(account);
     }
 
+    // Only accessible if user is logged in
+    // Used to test if a user is logged in. Returns 403 if not.
     @GetMapping("secured")
     public String secured(HttpServletRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
