@@ -1,4 +1,4 @@
-package com.example.workout_app.models;
+package com.example.workout_app.models.defaults;
 
 import java.time.LocalTime;
 
@@ -11,9 +11,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table
+@Data
 public class WorkSet {
     @Id
     @SequenceGenerator(name = "set_sequence", sequenceName = "set_sequence", allocationSize = 1)
@@ -28,30 +30,6 @@ public class WorkSet {
     private int reps = -1;
     private float weight = -1;
     private LocalTime time = null;
-
-    public float getWeight() {
-        return weight;
-    }
-
-    public void setWeight(float weight) {
-        this.weight = weight;
-    }
-
-    public int getReps() {
-        return reps;
-    }
-
-    public void setReps(int reps) {
-        this.reps = reps;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
 
     // Builder Pattern
     public static class Builder {

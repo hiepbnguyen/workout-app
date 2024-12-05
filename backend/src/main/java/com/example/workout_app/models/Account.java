@@ -2,11 +2,12 @@ package com.example.workout_app.models;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.workout_app.models.defaults.Routine;
+import com.example.workout_app.models.defaults.Workout;
+import com.example.workout_app.models.logs.RoutineLog;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,9 +30,12 @@ public class Account {
     private List<Routine> routines;
 
     @OneToMany(mappedBy = "account")
+    private List<Workout> workouts;
+
+    @OneToMany(mappedBy = "account")
     private List<RoutineLog> routineLogs;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
         name = "account_roles",
         joinColumns = @JoinColumn(name = "account_id"),

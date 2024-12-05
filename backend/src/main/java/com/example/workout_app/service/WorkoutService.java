@@ -5,10 +5,17 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.workout_app.models.WorkSet;
+import com.example.workout_app.models.defaults.WorkSet;
+import com.example.workout_app.models.defaults.Workout;
+import com.example.workout_app.repositories.WorkoutRepository;
 
 @Service
 public class WorkoutService {
+	private final WorkoutRepository workoutRepository;
+
+	public WorkoutService(WorkoutRepository workoutRepository) {
+		this.workoutRepository = workoutRepository;
+	}
 
     public List<WorkSet> getWorkouts(){
 		return List.of(
@@ -23,4 +30,8 @@ public class WorkoutService {
 				.build()
 		);
     }
+
+	public Workout createWorkout(Workout workout){
+		return workoutRepository.save(workout);
+	}
 }

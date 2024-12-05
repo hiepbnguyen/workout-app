@@ -1,4 +1,4 @@
-package com.example.workout_app.models;
+package com.example.workout_app.models.logs;
 
 import java.time.LocalTime;
 
@@ -11,9 +11,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table
+@Data
 public class WorkSetLog {
     @Id
     @SequenceGenerator(name = "set_log_sequence", sequenceName = "set_log_sequence", allocationSize = 1)

@@ -9,11 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.workout_app.models.WorkSet;
-import com.example.workout_app.models.Workout;
+import com.example.workout_app.models.defaults.WorkSet;
 import com.example.workout_app.service.WorkoutService;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
