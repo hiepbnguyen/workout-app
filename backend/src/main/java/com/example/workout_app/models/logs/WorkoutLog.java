@@ -46,5 +46,5 @@ public class WorkoutLog {
     private String name;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private int order;
+    private int position;
 }

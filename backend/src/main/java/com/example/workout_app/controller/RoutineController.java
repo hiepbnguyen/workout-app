@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.workout_app.dto.AddWorkoutsToRoutineDTO;
+import com.example.workout_app.dto.CreateRoutineDTO;
+import com.example.workout_app.dto.outgoing.RoutineDTO;
 import com.example.workout_app.models.Account;
 import com.example.workout_app.models.defaults.Routine;
 import com.example.workout_app.models.defaults.Workout;
@@ -11,17 +14,20 @@ import com.example.workout_app.security.SecurityUser;
 import com.example.workout_app.service.RoutineService;
 import com.example.workout_app.service.WorkoutService;
 
+import java.util.List;
+
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping(path = "/api/v1/routine")
+@RequestMapping(path = "/api/v1/routines")
 public class RoutineController {
     @Autowired
     private final RoutineService routineService;
@@ -33,7 +39,7 @@ public class RoutineController {
     }
 
     @PostMapping()
-    public ResponseEntity<Routine> createRoutine(@RequestParam String name) {
+    public ResponseEntity<Routine> createRoutine(@RequestBody CreateRoutineDTO dto) {
         // Retrieves Account from Security Context Holder
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         SecurityUser securityUser = (SecurityUser) auth.getPrincipal();
@@ -41,7 +47,7 @@ public class RoutineController {
 
         // Creates a new Routine with a Name and Account
         Routine newRoutine = new Routine();
-        newRoutine.setName(name);
+        newRoutine.setName(dto.getName());
         newRoutine.setAccount(account);
 
         // Saves routine to database
@@ -53,30 +59,18 @@ public class RoutineController {
     }
 
     // TODO: Verify that Workout and Routine are under the user's account (?)
-    // Could skip ^ if we decide that mutliple users have access to same workout, but not plausible because
+    // Could skip ^ if we decide that multiple users have access to same workout, but not plausible because
     // of logging for workout weights. Might be useful to have people share empty routine templates with
     // each other? Or maybe have routines posted on a user's account and other users can view routines and then
     // copy them for themselves.
-    @PostMapping("/addworkout")
-    public ResponseEntity<Routine> addWorkoutToRoutine(@RequestParam Long routineId, @RequestParam Long workoutId) {
-        Routine routine = routineService.addWorkoutToRoutine(routineId, workoutId);
-
-        return ResponseEntity.ok(routine);
+    @PostMapping("/{routineId}/workouts")
+    public ResponseEntity<RoutineDTO> addWorkoutsToRoutine(@RequestBody AddWorkoutsToRoutineDTO dto) {
+        Routine routine = routineService.addWorkoutsToRoutine(dto.getRoutineId(), dto.getWorkoutIds());
+        RoutineDTO returnDTO = new RoutineDTO(routine);
+        return ResponseEntity.ok(returnDTO);
     }
 
-    @PostMapping("/workout")
-    public ResponseEntity<Workout> createWorkout(@RequestBody String name) {
-        Account account = ((SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAccount();
-        
-        Workout newWorkout = new Workout(account, name);
-
-        workoutService.createWorkout(newWorkout);
-        
-        return ResponseEntity.ok(newWorkout);
-    }
-    
-
-    // TODO: Implement copying routines
+    // TODO: Implement copying routines and create DTO
     @PostMapping("/copy")
     public ResponseEntity<Routine> copyRoutine(@RequestParam Long copyRoutineId) {
         // Retrieves Account from Security Context Holder
@@ -86,6 +80,7 @@ public class RoutineController {
 
         // Creates a new Routine with a Name and Account
         Routine newRoutine = new Routine();
+        
         // newRoutine.setName(name);
         newRoutine.setAccount(account);
 

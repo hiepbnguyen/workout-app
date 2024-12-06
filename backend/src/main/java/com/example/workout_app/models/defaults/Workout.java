@@ -3,6 +3,7 @@ import java.util.List;
 
 import com.example.workout_app.models.Account;
 import com.example.workout_app.models.logs.WorkoutLog;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ public class Workout {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "workout_sequence")
     private Long id;
     
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
@@ -47,6 +49,7 @@ public class Workout {
 
     private String name;
 
+    public Workout() {}
     public Workout(Account account, String name) {
         this.account = account;
         this.name = name;

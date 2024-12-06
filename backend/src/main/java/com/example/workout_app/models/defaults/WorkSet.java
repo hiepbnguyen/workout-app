@@ -33,6 +33,7 @@ public class WorkSet {
 
     // Builder Pattern
     public static class Builder {
+        private int setNumber;
         private float weight = -1;
         private int reps = -1;
         private LocalTime time = null;
@@ -54,12 +55,18 @@ public class WorkSet {
             return this;
         }
 
+        public Builder setNumber(int SetNumber){
+            setNumber = SetNumber;
+            return this;
+        }
+
         public WorkSet build(){
             return new WorkSet(this);
         }
     }
 
     private WorkSet(Builder builder){
+        setNumber = builder.setNumber;
         weight = builder.weight;
         reps = builder.reps;
         time = builder.time;

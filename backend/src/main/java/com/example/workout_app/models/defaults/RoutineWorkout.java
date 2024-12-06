@@ -8,12 +8,12 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import jakarta.persistence.GenerationType;
 
-@Data
 @Entity
 @Table
+@Data
 public class RoutineWorkout {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
@@ -22,11 +22,12 @@ public class RoutineWorkout {
     @ManyToOne
     private Workout workout;
 
-    private int order;
+    private int position;
 
-    public RoutineWorkout(Routine routine, Workout workout, int order) {
+    public RoutineWorkout() {}
+    public RoutineWorkout(Routine routine, Workout workout, int position) {
         this.routine = routine;
         this.workout = workout;
-        this.order = order;
+        this.position = position;
     }
 }
