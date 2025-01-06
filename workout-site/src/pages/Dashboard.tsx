@@ -37,7 +37,7 @@ export default function Dashboard () {
       {/* <div className="flex w-full p-2.5 bg-background"> */}
         <NavigationMenu className="justify-start py-2 my-2 mx-4 sticky top-0 w-[100%-4px] bg-background backdrop-blur-sm">
           <NavigationMenuList className="">
-            <NavigationMenuLink href="/login" className={`text-foreground ${navigationMenuTriggerStyle()}`}>
+            <NavigationMenuLink  href="/login" className={`text-foreground ${navigationMenuTriggerStyle()}`}>
               Dashboard
             </NavigationMenuLink>
             <NavigationMenuLink href="/" className={`text-foreground ${navigationMenuTriggerStyle()}`}>
