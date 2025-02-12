@@ -43,6 +43,9 @@ public class SecurityConfigs {
             .authorizeHttpRequests(auth -> auth
                 // auth.requestMatchers("/api/v1/user/secured").authenticated();
                 // auth.requestMatchers(HttpMethod.POST, "/api/v1/user").hasRole("ANONYMOUS");
+                .requestMatchers(HttpMethod.GET, "/api/v1/auth/secured").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
+
                 .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/user/secured").authenticated()
@@ -66,7 +69,7 @@ public class SecurityConfigs {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfigurationSource corsConfigurationSource() {
         return new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -83,7 +86,7 @@ public class SecurityConfigs {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
+    AuthenticationManager authenticationManager(
         AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
