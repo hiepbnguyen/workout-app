@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -20,8 +22,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpMethod;
 
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
@@ -39,13 +39,11 @@ public class SecurityConfigs {
         return http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            // .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 // auth.requestMatchers("/api/v1/user/secured").authenticated();
                 // auth.requestMatchers(HttpMethod.POST, "/api/v1/user").hasRole("ANONYMOUS");
                 .requestMatchers(HttpMethod.GET, "/api/v1/auth/secured").authenticated()
-                .requestMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
-
+                .requestMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/user/secured").authenticated()
@@ -60,13 +58,17 @@ public class SecurityConfigs {
             .userDetailsService(jpaUserDetailsService)
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .maximumSessions(1)
+                // .maximumSessions(1)
             )
             // .oauth2Login(Customizer.withDefaults())
             // .formLogin(Customizer.withDefaults())
             // .httpBasic(Customizer.withDefaults())
             .build();
     }
+
+    // @Bean
+    // AuthenticationFailureHandler authenticationFailureHandler() {
+    // }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -88,11 +90,17 @@ public class SecurityConfigs {
     @Bean
     AuthenticationManager authenticationManager(
         AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
+        return authConfig
+            .getAuthenticationManager();
     }
     
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityContextRepository securityContextRepository() {
+      return new HttpSessionSecurityContextRepository();
     }
 }

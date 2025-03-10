@@ -10,4 +10,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  esbuild: {
+    logLevel: "silent", // Suppress warnings/errors from esbuild
+  },
+  build: {
+    outDir: 'dist',
+    target: 'esnext',
+  }
 })

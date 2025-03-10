@@ -1,5 +1,6 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { api_url } from "./utils";
 
 type AuthProviderState = {
   isAuthenticated: boolean | null
@@ -22,7 +23,7 @@ export default function AuthProvider({children}: {children: any}) {
 
   useEffect(() => {
     axios.get(
-      "http://localhost:8080/api/v1/user/secured", {
+      api_url+"/api/auth/protected", {
         withCredentials: true
       }
     ).then(response => {

@@ -55,7 +55,7 @@ public class AccountService {
 
         accountRepository.save(newAccount);
 
-        System.out.println(newAccount);
+        System.out.println("Created new account: " + newAccount);
     }
 
     // Logins an account

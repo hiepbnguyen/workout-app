@@ -1,5 +1,7 @@
 package com.example.workout_app;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
@@ -9,15 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.workout_app.models.Role;
 import com.example.workout_app.models.Account;
+import com.example.workout_app.models.Role;
 import com.example.workout_app.repositories.RoleRepository;
 import com.example.workout_app.repositories.AccountRepository;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @SpringBootApplication
 public class Application {
@@ -35,16 +32,16 @@ public class Application {
 			roles.save(userRole);
 			roles.save(adminRole);
 
-			// accounts.save(new Account(
-			// 	"hiep@gmail.com",
-			// 	encoder.encode("banana"),
-			// 	"Hiep",
-			// 	LocalDate.of(2000, 5, 5),
-			// 	Arrays.asList(
-			// 		new Role("USER"),
-			// 		new Role("ADMIN")
-			// 	)
-			// ));
+			accounts.save(new Account(
+				"hiep@gmail.com",
+				encoder.encode("Banana!12345"),
+				"Hiep",
+				LocalDate.of(2000, 5, 5),
+				Arrays.asList(
+					new Role("USER"),
+					new Role("ADMIN")
+				)
+			));
 			
 			// accounts.save(new Account(
 			// 	"apple@gmail.com",

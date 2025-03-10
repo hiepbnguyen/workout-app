@@ -16,6 +16,7 @@ import axios from 'axios'
 import { useAuth } from "@/lib/AuthProvider"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
+import { api_url } from "@/lib/utils"
 
 const registerSchema = z.object({
   username: z.string().email({message: "Please enter a valid email."}).min(1, {message: "Field cannot be blank."}),
@@ -28,7 +29,7 @@ const registerSchema = z.object({
 export default function Login() {
   const [username, setUsername] = useState<string>("avatre@mail.com")
   const [name, setName] = useState<string>("ava")
-  const [password, setPassword] = useState<string>("avatre")
+  const [password, setPassword] = useState<string>("Banana123!")
   const [date, setDate] = useState<Date>(new Date("1997-12-11"))
   const {isAuthenticated, setIsAuthenticated} = useAuth()
   const navigate = useNavigate()
@@ -60,13 +61,21 @@ export default function Login() {
     const parsed = registerSchema.parse(registerFields)
 
     if (username != undefined && password != undefined && date != undefined && name != undefined) {
-      let form = new FormData()
-      form.append("email", parsed.username)
-      form.append("password", parsed.password)
-      form.append("name", parsed.name)
-      const isodate: string = parsed.dob.toISOString().substring(0,10)
-      form.append("dob", isodate)
-      const response = await axios.post("http://localhost:8080/api/v1/user/register", form)
+      // let form = new FormData()
+      // form.append("email", parsed.username)
+      // form.append("password", parsed.password)
+      // form.append("name", parsed.name)
+      // const isodate: string = parsed.dob.toISOString().substring(0,10)
+      // form.append("dob", isodate)
+      // const response = await axios.post("http://localhost:8080/api/v1/user/register", form)
+      const payload = {
+        Email: parsed.username,
+        Name: parsed.name,
+        Password: parsed.password,
+        DateOfBirth: parsed.dob.toISOString().substring(0,10)
+      }
+      console.log(payload)
+      const response = await axios.post(api_url+"/api/auth/register", payload)
       console.log(response)
       console.log(response.status)
     }
@@ -74,12 +83,15 @@ export default function Login() {
 
   const submitLogin = async () => {
     if (username != undefined && password != undefined) {
-      let form = new FormData()
-      form.append("email", username)
-      form.append("password", password)
+      // let form = new FormData()
+      // form.append("email", username)
+      // form.append("password", password)
       axios.post(
-        "http://localhost:8080/api/v1/user/login",
-        form, {
+        api_url+"/api/auth/login",
+        {
+          email: username,
+          password: password
+        }, {
           withCredentials: true
         }
       ).then(resp => {
@@ -99,7 +111,7 @@ export default function Login() {
 
   const printuser = async () => {
     const response = await axios.get(
-      "http://localhost:8080/api/v1/user/secured", {
+      api_url+"/api/auth/protected", {
         withCredentials: true
       }
     )

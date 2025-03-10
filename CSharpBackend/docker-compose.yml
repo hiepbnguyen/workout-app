@@ -1,0 +1,33 @@
+version: '3.8'
+
+name: workout-app
+services:
+  # backend:
+  #   env_file: ".env"
+  #   image: 'docker-spring-boot-postgres:latest'
+  #   build:
+  #     context: .
+  #   container_name: backend
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - POSTGRES_USER=$YOUR_USERNAME
+  #     - POSTGRES_PASSWORD=$YOUR_PASSWORD
+  #     - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/$YOUR_DB_NAME
+  #     - SPRING_DATASOURCE_USERNAME=$YOUR_USERNAME
+  #     - SPRING_DATASOURCE_PASSWORD=$YOUR_PASSWORD
+  #     - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  #   ports:
+  #     - "$LOCAL_PORT:$DOCKER_PORT"
+
+  db:
+    env_file: ".env"
+    image: postgres
+    container_name: workout-db
+    environment:
+      - POSTGRES_USER=$POSTGRES_USERNAME
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB_NAME
+    ports:
+      - "$POSTGRES_LOCAL_PORT:$POSTGRES_DOCKER_PORT"
